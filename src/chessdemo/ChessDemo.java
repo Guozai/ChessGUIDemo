@@ -8,10 +8,13 @@ package chessdemo;
 import javafx.util.Duration;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
+import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.stage.Stage;
@@ -22,8 +25,9 @@ import javafx.stage.Stage;
  */
 public class ChessDemo extends Application {
     
-    @Override
-    public void start(Stage primaryStage) {
+    private SequentialTransition sequentialTransition;
+    
+    @Override public void start(Stage primaryStage) {
         Group root = new Group();
         final Scene scene = new Scene(root, 640, 640, Color.WHITE);
         
@@ -127,10 +131,33 @@ public class ChessDemo extends Application {
         rG1.setFill(Color.BLACK);
         root.getChildren().add(rG1);
         
+        // Create the chess pieces as circles
+        // kingW stands for kingWhite
+        Circle pieceKingWhite = new Circle(283.5, 583.5, 30, Color.YELLOW);
+        pieceKingWhite.setStroke(Color.BLACK);
+        pieceKingWhite.setStrokeWidth(2.0);
+        //pieceKingWhite.setTranslateX(50);
+        //pieceKingWhite.setTranslateY(50);
+	root.getChildren().add(pieceKingWhite);
         
         primaryStage.setTitle("Chess-like Game GUI Demo");
         primaryStage.setScene(scene);
         primaryStage.show();
+        
+        // Move the piece
+        TranslateTransition translateTransition =
+            new TranslateTransition(Duration.millis(2000), pieceKingWhite);
+        translateTransition.setFromX(50);
+        translateTransition.setToX(375);
+        translateTransition.setCycleCount(1);
+        translateTransition.setAutoReverse(true);
+        
+        // create a sequential transition to do four transitions one after another
+        sequentialTransition = new SequentialTransition();
+        sequentialTransition.getChildren().add(translateTransition);
+        sequentialTransition.setCycleCount(Timeline.INDEFINITE);
+        sequentialTransition.setAutoReverse(true);
+        sequentialTransition.play(); 
     }
 
     /**
