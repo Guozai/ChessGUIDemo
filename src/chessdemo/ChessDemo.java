@@ -5,16 +5,17 @@
  */
 package chessdemo;
 
-import javafx.util.Duration;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
+//import javafx.util.Duration;
+//import javafx.animation.KeyFrame;
+//import javafx.animation.KeyValue;
 import javafx.animation.SequentialTransition;
-import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
+//import javafx.animation.Timeline;
+//import javafx.animation.TranslateTransition;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.stage.Stage;
@@ -132,18 +133,40 @@ public class ChessDemo extends Application {
         root.getChildren().add(rG1);
         
         // Create the chess pieces as circles
-        // kingW stands for kingWhite
-        Circle pieceKingWhite = new Circle(283.5, 583.5, 30, Color.YELLOW);
+        final Circle pieceKingWhite = new Circle(283.5, 583.5, 30, Color.YELLOW);
         pieceKingWhite.setStroke(Color.BLACK);
         pieceKingWhite.setStrokeWidth(2.0);
-        //pieceKingWhite.setTranslateX(50);
-        //pieceKingWhite.setTranslateY(50);
 	root.getChildren().add(pieceKingWhite);
+        
+        final Circle pieceKingBlack = new Circle(283.5, 55, 30, Color.BLACK);
+        pieceKingBlack.setStroke(Color.WHITE);
+        pieceKingBlack.setStrokeWidth(2.0);
+	root.getChildren().add(pieceKingBlack);
         
         primaryStage.setTitle("Chess-like Game GUI Demo");
         primaryStage.setScene(scene);
         primaryStage.show();
         
+        // Add action listeners
+        pieceKingBlack.setOnMousePressed(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent me) {
+                System.out.println("Mouse pressed");
+            }
+        });
+        
+        pieceKingBlack.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent me) {
+                System.out.println("Mouse dragged: x - " + me.getX() + ", y - " + me.getY());
+            }
+        });
+        
+        pieceKingBlack.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent me) {
+                System.out.println("Mouse released");
+            }
+        });
+        
+        /**
         // Move the piece
         TranslateTransition translateTransition =
             new TranslateTransition(Duration.millis(2000), pieceKingWhite);
@@ -158,6 +181,7 @@ public class ChessDemo extends Application {
         sequentialTransition.setCycleCount(Timeline.INDEFINITE);
         sequentialTransition.setAutoReverse(true);
         sequentialTransition.play(); 
+        **/ 
     }
 
     /**
